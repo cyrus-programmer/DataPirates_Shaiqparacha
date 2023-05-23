@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+</head>
+
+<style>
+    table {
+        width: 80%;
+        border: 1px solid black;
+    }
+
+    tr {
+        border: 1px solid black;
+        height: 50px;
+        width: 50px;
+    }
+
+    td {
+        border: 1px solid black;
+    }
+</style>
+
+<body>
+    <h1>
+        <%=title %>
+    </h1>
+    <% if(action=='add_video' ) { %>
+        <form action="/inventory/add_item_video" method="post" id="form-1">
+            <label>Title<input type="text" name="title"></label><br>
+            <label>Quantity<input type="number" name="quantity"></label><br>
+            <label>Market Price<input id="market" type="number" name="market_price"></label><br>
+            <label>Cost Price<input id="cost" type="number" name="costprice"></label><br>
+
+            <label>Minimum Age<input type="number" name="minimum_age"></label><br>
+            <label>Genre<input type="text" name="genre"></label><br>
+            <label>Platform<input type="text" name="platform"></label><br>
+
+            <input type="submit" value="submit" />
+        </form>
+        <% } else if(action=='add_gear' ) { %>
+            <form action="/inventory/add_item_gear" method="post" id="form-1">
+                <label>Title<input type="text" name="title"></label><br>
+                <label>Quantity<input type="number" name="quantity"></label><br>
+                <label>Market Price<input id="market" type="number" name="market_price"></label><br>
+                <label>Cost Price<input id="cost" type="number" name="costprice"></label><br>
+
+                <label>Minimum Age<input type="number" name="minimum_age"></label><br>
+                <label>Gear Type<input type="text" name="type"></label><br>
+                <label>Compatibility<input type="text" name="compatibility"></label><br>
+
+                <input type="submit" value="submit" />
+            </form>
+            <% } else if(action == 'edit') { %>
+                <form action="/inventory/edit/<%= inventory.id %>" method="post" id="form-1">
+                    <label>Title<input type="text" name="title" value=<%= inventory.title %>></label><br>
+                    <label>Quantity<input type="number" name="quantity" value=<%= inventory.quantity %>></label><br>
+                    <label>Market Price<input id="market" type="number" name="market_price" value=<%= inventory.marketprice %>></label><br>
+                    <label>Cost Price<input id="cost" type="number" name="costprice" value=<%= inventory.costprice %>></label><br>
+    
+                    <label>Minimum Age<input type="number" name="minimum_age" value=<%= inventory.age_limit %>></label><br>
+                    <% if(inventory.inventory_type==0){%>
+                    <label>Inventory Type<input type="text" name="type" disabled value="Game Gears"></label><br>
+                    <label>Gear Type<input type="text" name="type" value=<%= inventory.type %>></label><br>
+                    <label>Compatibility<input type="text" name="compatibility" value=<%= inventory.compatibility %>></label><br>
+                    <% }else{%>
+                        <label>Inventory Type<input type="text" name="type" disabled value="Video Games"></label><br>
+                        <label>Genre<input type="text" name="genre" value=<%= inventory.genre %>></label><br>
+            <label>Platform<input type="text" name="platform" value=<%= inventory.platform %>></label><br>
+            <% }%>
+                    <input type="submit" value="submit" />
+                </form>
+            <% }else{ %>
+                <a href="inventory/add_video">Add Video Game into Inventory</a>
+                <a href="inventory/add_gear">Add Game Gear into Inventory</a>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Quantity</th>
+                            <th>Market Price</th>
+                            <th>Cost Price</th>
+                            <th>Margin</th>
+                            <th>Age Limit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(inventory.length){ 
+                            for(var i=0; i< inventory.length; i++) {%>
+                            <tr>
+                                <th scope="row">
+                                    <%= (i+1) %>
+                                </th>
+                                <td>
+                                    <%= inventory[i].title%>
+                                </td>
+                                <td>
+                                    <%= inventory[i].quantity%>
+                                </td>
+                                <td>
+                                    <%= inventory[i].marketprice%>
+                                </td>
+                                <td>
+                                    <%= inventory[i].costprice%>
+                                </td>
+                                <td>
+                                    <%= inventory[i].margin%>
+                                </td>
+                                <% if(inventory[i].inventory_type==1){ %>
+                                    <td>Video Games</td>
+                                    <% }else{ %>
+                                        <td>Game Gears</td>
+                                        <% } %>
+                                            <td>
+                                                <%= inventory[i].age_limit%>
+                                            </td>
+                                            <td>
+                                                <a href="/inventory/edit/<%= inventory[i].id %>" style="width: 60px; background-color: rgb(64, 64, 168); height: 50px; color: white; text-decoration: none; border-radius: 5px;">Edit</a>
+                                                <a href="/inventory/delete/<%= inventory[i].id %>" style="width: 60px; background-color: rgb(160, 26, 26); color: white; text-decoration: none;border-radius: 5px;">Delete</a>
+                                            </td>
+
+                                            <% } }else{ %>
+                            <tr>
+                                <td colspan="8">No Data Found</td>
+                            </tr>
+                            <% } %>
+
+                    </tbody>
+                </table>
+                <%}%>
+</body>
+
+</html>
